@@ -7,11 +7,24 @@ app = FastAPI() # instance
 
 @app.get('/') # decorater
 def index(): # function
-    return {'data': {'name': 'tushar'}}
+    return {'data': {'blog list'}}
 
 
 
-@app.get('/about')
-def about():
-    return {'data': 'about page'}
+@app.get('/blog/unpublished')
+def unpublished():
+    return {'data':'all unpublished blog'}
+
+
+@app.get('/blog/{id}')
+def show(id: int):
+    return {'data': id}
+
+
+
+@app.get('/blog/{id}/comments')
+def comments(id):
+    return {'data': {'1', '2', '3'}}
+
+
 
