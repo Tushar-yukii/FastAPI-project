@@ -40,7 +40,9 @@ class Blog(BaseModel):
 def Create_blog(request: Blog):
     # return request
     return {'data': f"blog is created with title {request.title}"}
+# error
 
 # for debugging 
 # if __name__ == "__main__":
 #     uvicorn.run(app,host="127.0.0.1", port=9000) 
+
