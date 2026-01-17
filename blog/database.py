@@ -10,3 +10,4 @@ engine = create_engine(SQLALCHAMY_DATABASE_URL,{"check_same_thread": False})
 SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
 
 base = declaration_base()
+# error
