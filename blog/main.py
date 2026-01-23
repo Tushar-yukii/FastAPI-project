@@ -29,5 +29,15 @@ def all(db : Session = Depends(get_db)):
     blogs = db.query(modals.Blog).all()
     return blogs
 
+@app.get('/blog/{id}')
+def show(id , db : Session = Depends(get_db)):
+    blog = db.query(modals.Blog).filter(modals.Blog.id == id).first()
+    return blog
+
+    
+    
+
+ 
+
 
 
