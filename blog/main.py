@@ -38,11 +38,10 @@ def update(id, request: schemas.Blog, db : Session = Depends(get_db)):
    blog = db.query(modals.Blog).filter(modals.Blog.id == id)
    if not blog.first():
        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'blog with id {id} not found')
-   blog.update(request)
+   blog.update(request.dict())
    db.commit()
    return 'updated'
       
-
 @app.get('/blog')
 def all(db : Session = Depends(get_db)):
     blogs = db.query(modals.Blog).all()
