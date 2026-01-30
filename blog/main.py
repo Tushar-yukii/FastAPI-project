@@ -1,3 +1,4 @@
+from typing import List
 from fastapi import FastAPI, Depends, status, Response, HTTPException
 from .import schemas, modals
 from .database import engine, SessionLocal
@@ -38,16 +39,16 @@ def update(id, request: schemas.Blog, db : Session = Depends(get_db)):
    blog = db.query(modals.Blog).filter(modals.Blog.id == id)
    if not blog.first():
        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'blog with id {id} not found')
-   blog.update(request.dict())
+   blog.update(request.dict()) # some error
    db.commit()
    return 'updated'
       
-@app.get('/blog')
+@app.get('/blog', response_model=List[schemas.ShowBlog])
 def all(db : Session = Depends(get_db)):
     blogs = db.query(modals.Blog).all()
     return blogs
 
-@app.get('/blog/{id}', status_code=200)
+@app.get('/blog/{id}', status_code=200, response_model=schemas.ShowBlog)
 def show(id , response : Response, db : Session = Depends(get_db)):
     blog = db.query(modals.Blog).filter(modals.Blog.id == id).first()
     if not blog:
