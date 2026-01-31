@@ -56,7 +56,7 @@ def show(id , response : Response, db : Session = Depends(get_db)):
                              detail=f"blog with the id {id} not available")
         # response.status_code = status.HTTP_404_NOT_FOUND
         # return {"detail": f"blog with the id {id} not available"}
-        
+        # error
     return blog
 
 
