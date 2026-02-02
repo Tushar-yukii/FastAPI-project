@@ -60,5 +60,5 @@ def show(id , response : Response, db : Session = Depends(get_db)):
     return blog
 
 @app.post('/user')
-def create_user(request : schemas.User):
+def create_user(request: schemas.User, db : Session = Depends(get_db)):
     return request
