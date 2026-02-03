@@ -1,3 +1,6 @@
-fastAPI
+fastapi
 uvicorn
 sqlalchemy
+passlib
+bcrypt
+email-validator
