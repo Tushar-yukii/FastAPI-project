@@ -10,6 +10,8 @@ class ShowBlog(BaseModel):
     model_config = {
         "from_attributes": True
     }
+# class config():
+#     orm_mode = True
 
 class User(BaseModel):
     name: str
@@ -23,7 +25,7 @@ class ShowUser(BaseModel):
     model_config = {
         "from_attributes": True
     }
-    #conifg should be Config Pydantic v1
-    # class config():
-    #     orm_mode = True
+#conifg should be Config Pydantic v1
+# class config():
+#     orm_mode = True
         
