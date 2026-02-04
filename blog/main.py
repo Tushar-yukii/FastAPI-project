@@ -5,7 +5,6 @@ from .database import engine, SessionLocal
 from sqlalchemy.orm import Session
 from .hashing import Hash
 
-
 app = FastAPI()
 
 def get_db():
@@ -62,8 +61,7 @@ def show(id , response : Response, db : Session = Depends(get_db)):
     return blog
 
 
-
-@app.post('/user')
+@app.post('/user',response_model=schemas.ShowUser)
 def create_user(request: schemas.User, db: Session = Depends(get_db)):
    
     new_user = modals.User(
@@ -75,5 +73,13 @@ def create_user(request: schemas.User, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(new_user)
     return new_user
+
+@app.get('/user', response_model=schemas.ShowUser)
+def get_user(id: int, db: Session = Depends(get_db)):
+    user = db.query(modals.User).filter(modals.User.id == id).first()
+    if not user:
+         raise  HTTPException(status_code=status.HTTP_404_NOT_FOUND ,
+                             detail=f"user with the id {id} not available")
+    return user        
 
 
