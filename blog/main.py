@@ -18,7 +18,7 @@ modals.Base.metadata.create_all(engine)
 
 @app.post('/blog', status_code=status.HTTP_201_CREATED, tags=['blogs']) 
 def create(request:schemas.Blog, db : Session = Depends(get_db)): # database instance
-    new_blog = modals.Blog(title=request.title, body = request.body, user_id=1) #
+    new_blog = modals.Blog(title=request.title, body = request.body, user_id=1)
     db.add(new_blog)
     db.commit()
     db.refresh(new_blog)
@@ -40,7 +40,7 @@ def update(id, request: schemas.Blog, db : Session = Depends(get_db)):
    blog = db.query(modals.Blog).filter(modals.Blog.id == id)
    if not blog.first():
        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'blog with id {id} not found')
-   blog.update(request.dict()) # some error
+   blog.update(request.model_dump()) # some error
    db.commit()
    return 'updated'
       
