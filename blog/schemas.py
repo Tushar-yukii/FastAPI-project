@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 from pydantic import BaseModel, EmailStr, Field
 
 class BlogBase(BaseModel):
@@ -29,7 +29,8 @@ class ShowUser(BaseModel):
 class ShowBlog(BaseModel):
     title: str
     body: str
-    creator: ShowUser
+    creator: Optional[ShowUser] = None #
+
     model_config = {
         "from_attributes": True
     }

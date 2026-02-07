@@ -1,20 +1,23 @@
 from typing import List
 from fastapi import FastAPI, Depends, status, Response, HTTPException
 from .import schemas, modals
-from .database import engine, SessionLocal
+from .database import engine, get_db
+# SessionLocal
 from sqlalchemy.orm import Session
 from .hashing import Hash
-
+from .routers import blog
 app = FastAPI()
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
             
 modals.Base.metadata.create_all(engine)
+
+app.include_router(blog.router)
+
+# def get_db():
+#     db = SessionLocal()
+#     try:
+#         yield db
+#     finally:
+#         db.close()
 
 @app.post('/blog', status_code=status.HTTP_201_CREATED, tags=['blogs']) 
 def create(request:schemas.Blog, db : Session = Depends(get_db)): # database instance
@@ -23,6 +26,27 @@ def create(request:schemas.Blog, db : Session = Depends(get_db)): # database ins
     db.commit()
     db.refresh(new_blog)
     return new_blog
+
+# @app.post('/blog')
+# def create(request: schemas.Blog, db: Session = Depends(get_db)):
+#     user = db.query(modals.User).first()
+#     if not user:
+#         raise HTTPException(status_code=400, detail="No users exist")
+
+#     new_blog = modals.Blog(
+#         title=request.title,
+#         body=request.body,
+#         user_id=user.id
+#     )
+
+#     db.add(new_blog)
+#     db.commit()
+#     db.refresh(new_blog)
+#     return new_blog
+
+
+
+
 
 # delete blog
 @app.delete('/blog/{id}', status_code=status.HTTP_204_NO_CONTENT, tags=['blogs'])
@@ -44,10 +68,10 @@ def update(id, request: schemas.Blog, db : Session = Depends(get_db)):
    db.commit()
    return 'updated'
       
-@app.get('/blog', response_model=List[schemas.ShowBlog], tags=['blogs'])
-def all(db : Session = Depends(get_db)):
-    blogs = db.query(modals.Blog).all()
-    return blogs
+# @app.get('/blog', response_model=List[schemas.ShowBlog], tags=['blogs'])
+# def all(db : Session = Depends(get_db)):
+#     blogs = db.query(modals.Blog).all()
+#     return blogs
 
 @app.get('/blog/{id}', status_code=200, response_model=schemas.ShowBlog, tags=['blogs'])
 def show(id , response : Response, db : Session = Depends(get_db)):
