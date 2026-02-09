@@ -2,16 +2,19 @@ from typing import List
 from fastapi import APIRouter, Depends, status, HTTPException , Response
 from .. import schemas, database , modals
 from sqlalchemy.orm import Session
-router = APIRouter()
+router = APIRouter(
+    prefix='/blogs',
+    tags=['Blogs']
+)
 
 get_db = database.get_db 
-@router.get('/blog', response_model=List[schemas.ShowBlog])
+@router.get('/', response_model=List[schemas.ShowBlog])
 def all(db : Session = Depends(get_db)):
     blogs = db.query(modals.Blog).all()
     return blogs
 
 
-@router.post('/blog', status_code=status.HTTP_201_CREATED) 
+@router.post('/', status_code=status.HTTP_201_CREATED) 
 def create(request:schemas.Blog, db : Session = Depends(get_db)): # database instance
     new_blog = modals.Blog(title=request.title, body = request.body, user_id=1)
     db.add(new_blog)
@@ -20,7 +23,7 @@ def create(request:schemas.Blog, db : Session = Depends(get_db)): # database ins
     return new_blog
 
 # delete blog
-@router.delete('/blog/{id}', status_code=status.HTTP_204_NO_CONTENT)
+@router.delete('/{id}', status_code=status.HTTP_204_NO_CONTENT)
 def destroyed(id , db : Session = Depends(get_db)):
    blog =  db.query(modals.Blog).filter(modals.Blog.id == id)
    if not blog.first():
@@ -30,7 +33,7 @@ def destroyed(id , db : Session = Depends(get_db)):
    return f'blog id {id} is deleted'
    
 # update part  
-@router.put('/blog/{id}', status_code=status.HTTP_202_ACCEPTED)
+@router.put('/{id}', status_code=status.HTTP_202_ACCEPTED)
 def update(id, request: schemas.Blog, db : Session = Depends(get_db)):
    blog = db.query(modals.Blog).filter(modals.Blog.id == id)
    if not blog.first():
@@ -44,7 +47,7 @@ def update(id, request: schemas.Blog, db : Session = Depends(get_db)):
 #     blogs = db.query(modals.Blog).all()
 #     return blogs
 
-@router.get('/blog/{id}', status_code=200, response_model=schemas.ShowBlog, tags=['blogs'])
+@router.get('/{id}', status_code=200, response_model=schemas.ShowBlog, tags=['blogs'])
 def show(id , response : Response, db : Session = Depends(get_db)):
     blog = db.query(modals.Blog).filter(modals.Blog.id == id).first()
     if not blog:
