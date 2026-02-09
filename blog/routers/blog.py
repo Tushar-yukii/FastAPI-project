@@ -5,13 +5,13 @@ from sqlalchemy.orm import Session
 router = APIRouter()
 
 get_db = database.get_db 
-@router.get('/blog', response_model=List[schemas.ShowBlog], tags=['blogs'])
+@router.get('/blog', response_model=List[schemas.ShowBlog])
 def all(db : Session = Depends(get_db)):
     blogs = db.query(modals.Blog).all()
     return blogs
 
 
-@router.post('/blog', status_code=status.HTTP_201_CREATED, tags=['blogs']) 
+@router.post('/blog', status_code=status.HTTP_201_CREATED) 
 def create(request:schemas.Blog, db : Session = Depends(get_db)): # database instance
     new_blog = modals.Blog(title=request.title, body = request.body, user_id=1)
     db.add(new_blog)
@@ -19,9 +19,8 @@ def create(request:schemas.Blog, db : Session = Depends(get_db)): # database ins
     db.refresh(new_blog)
     return new_blog
 
-
 # delete blog
-@router.delete('/blog/{id}', status_code=status.HTTP_204_NO_CONTENT, tags=['blogs'])
+@router.delete('/blog/{id}', status_code=status.HTTP_204_NO_CONTENT)
 def destroyed(id , db : Session = Depends(get_db)):
    blog =  db.query(modals.Blog).filter(modals.Blog.id == id)
    if not blog.first():
@@ -31,7 +30,7 @@ def destroyed(id , db : Session = Depends(get_db)):
    return f'blog id {id} is deleted'
    
 # update part  
-@router.put('/blog/{id}', status_code=status.HTTP_202_ACCEPTED, tags=['blogs'])
+@router.put('/blog/{id}', status_code=status.HTTP_202_ACCEPTED)
 def update(id, request: schemas.Blog, db : Session = Depends(get_db)):
    blog = db.query(modals.Blog).filter(modals.Blog.id == id)
    if not blog.first():
