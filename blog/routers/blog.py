@@ -20,32 +20,20 @@ def create(request:schemas.Blog, db : Session = Depends(get_db)): # database ins
 
 # delete blog
 @router.delete('/{id}', status_code=status.HTTP_204_NO_CONTENT)
-def destroyed(id , db : Session = Depends(get_db)):
+def destroyed(id: int , db : Session = Depends(get_db)):
     return blog.destroyed(id, db) # 
    
    
 # update part  
 @router.put('/{id}', status_code=status.HTTP_202_ACCEPTED)
-def update(id, request: schemas.Blog, db : Session = Depends(get_db)):
-   blog = db.query(modals.Blog).filter(modals.Blog.id == id)
-   if not blog.first():
-       raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'blog with id {id} not found')
-   blog.update(request.model_dump()) # some error
-   db.commit()
-   return 'updated'
-      
+def update(id: int, request: schemas.Blog, db : Session = Depends(get_db)):
+    return blog.update(id, request, db)
+
 # @app.get('/blog', response_model=List[schemas.ShowBlog], tags=['blogs'])
 # def all(db : Session = Depends(get_db)):
 #     blogs = db.query(modals.Blog).all()
 #     return blogs
 
 @router.get('/{id}', status_code=200, response_model=schemas.ShowBlog, tags=['blogs'])
-def show(id , response : Response, db : Session = Depends(get_db)):
-    blog = db.query(modals.Blog).filter(modals.Blog.id == id).first()
-    if not blog:
-        raise  HTTPException(status_code=status.HTTP_404_NOT_FOUND ,
-                             detail=f"blog with the id {id} not available")
-        # response.status_code = status.HTTP_404_NOT_FOUND
-        # return {"detail": f"blog with the id {id} not available"}
-        
-    return blog
+def show(id: int , db : Session = Depends(get_db)):
+   return blog.show(id, db)
