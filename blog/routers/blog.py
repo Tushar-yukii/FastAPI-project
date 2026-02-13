@@ -1,11 +1,11 @@
 from typing import List
-from fastapi import APIRouter, Depends, status, HTTPException , Response
-from .. import schemas, database , modals
+from fastapi import APIRouter, Depends, status
+from .. import schemas, database
 from sqlalchemy.orm import Session
 from ..repo import blog
 
 router = APIRouter(
-    prefix='/blogs',
+    prefix='/blog',
     tags=['Blogs']
 )
 
@@ -34,6 +34,6 @@ def update(id: int, request: schemas.Blog, db : Session = Depends(get_db)):
 #     blogs = db.query(modals.Blog).all()
 #     return blogs
 
-@router.get('/{id}', status_code=200, response_model=schemas.ShowBlog, tags=['blogs'])
+@router.get('/{id}', status_code=200, response_model=schemas.ShowBlog)
 def show(id: int , db : Session = Depends(get_db)):
    return blog.show(id, db)
