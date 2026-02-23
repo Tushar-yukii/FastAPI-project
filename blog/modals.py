@@ -2,7 +2,6 @@ from sqlalchemy import Column, Integer, String, ForeignKey
 from .database import Base
 from sqlalchemy.orm import relationship 
 
-
 class Blog(Base):
     __tablename__ = "blogs"
     
@@ -14,7 +13,6 @@ class Blog(Base):
     
     creator = relationship("User", back_populates="blogs") #
     
-
 class User(Base):
     __tablename__ = "users"
     

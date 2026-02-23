@@ -2,7 +2,6 @@ from sqlalchemy.orm import Session
 from .. import modals, schemas
 from fastapi import HTTPException, status
 
-
 def get_all(db : Session):
      blogs = db.query(modals.Blog).all()
      return blogs

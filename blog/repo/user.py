@@ -3,7 +3,6 @@ from .. import modals, schemas
 from fastapi import HTTPException, status
 from ..hashing import Hash
 
-
 def create(request: schemas.User, db: Session):
     new_user = modals.User(
     name=request.name,
