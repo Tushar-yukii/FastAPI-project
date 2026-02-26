@@ -24,13 +24,12 @@ def login(request: schemas.Login, db: Session = Depends(database.get_db)):
             detail="Invalid credentials"
         )
         
-        # error
     if not Hash.verify(user.password, request.password):
          raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="incorrect password"
         )
 
-        
+# gernate JWT token and return      
     return user
 
