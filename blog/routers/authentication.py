@@ -30,7 +30,7 @@ def login(request: schemas.Login, db: Session = Depends(database.get_db)):
             detail="incorrect password"
         )
 
-# gernate JWT token and return      
+# gernate JWT token and return token      
     access_token = jwttoken.create_access_token(
         data={"sub": user.email})
     return {"access_token": access_token, "token_type": "bearer"}

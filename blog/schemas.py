@@ -29,7 +29,7 @@ class ShowUser(BaseModel):
 class ShowBlog(BaseModel):
     title: str
     body: str
-    creator: Optional[ShowUser] = None #
+    creator: Optional[ShowUser] = None 
 
     model_config = {
         "from_attributes": True
