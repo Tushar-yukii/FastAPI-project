@@ -2,3 +2,5 @@ __pycache__
 fastapi-env
 .DS_Store
 .env
+.postman
+.gitignore
